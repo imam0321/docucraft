@@ -3,7 +3,7 @@ import React from 'react'
 
 export const Sidebar = ({ docs }) => {
   const roots = docs.filter(doc => !doc.parent);
-  console.log(roots);
+  // console.log(roots);
   // object grouping data 
   const nonRoots = docs
     .filter(doc => doc.parent)
@@ -35,7 +35,7 @@ export const Sidebar = ({ docs }) => {
                             <Link
                               className="flex justify-between gap-2 py-1 pl-7 pr-3 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
                               href={`/docs/${rootNote.id}/${subRoot.id}`}
-                            ><span className="truncate">{subRoot.id}</span>
+                            ><span className="truncate">{subRoot.title}</span>
                             </Link>
                           </li>
                         ))
