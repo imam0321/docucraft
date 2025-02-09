@@ -5,7 +5,7 @@ import Link from "next/link"
 export const Landing = () => {
   return (
     <>
-      <article className="">
+      <article>
         <div className="relative">
           <div className=" relative mx-auto px-4 ">
             <div className="mx-auto grid max-w-[40rem] grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-5">
@@ -23,10 +23,11 @@ export const Landing = () => {
                 </p>
 
                 <div className="mt-10 flex flex-wrap gap-4">
-                  <a href="#"
+                  <Link href="/docs/introduction"
                     className="inline-flex justify-center rounded-lg bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-700"
-                    target="_blank">
-                    <span>Get Started</span></a>
+                  >
+                    <span>Get Started</span>
+                  </Link>
                 </div>
               </div>
               <div className="relative lg:col-span-3">

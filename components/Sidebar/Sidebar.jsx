@@ -35,8 +35,27 @@ export const Sidebar = ({ docs }) => {
         return acc;
       }, {});
 
+    const nonRootsKeys = Reflect.ownKeys(nonRoots);
+    nonRootsKeys.forEach(key => {
+      const foundInRoots = roots.find((root) => root.id === key);
+      if (!foundInRoots) {
+        const foundInDocs = docs.find((doc) => doc.id === key);
+        roots.push(foundInDocs);
+      }
+    });
+
+    roots.sort((a, b) => {
+      if (a.order < b.order) {
+        return -1;
+      }
+      if (a.order > b.order) {
+        return 1;
+      }
+      return 0;
+    });
+
     setRootNodes([...roots]);
-    setNonRootNodesGrouped({...nonRoots });
+    setNonRootNodesGrouped({ ...nonRoots });
 
   }, [pathName, docs])
 

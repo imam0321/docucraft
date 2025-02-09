@@ -1,7 +1,10 @@
+import { ContentDisplay } from "@/components/ContentDisplay/ContentDisplay";
+import { getDocuments } from "@/lib/Doc";
+import { getDocumentByCategory } from "@/utils/doc-util";
 
+export default function CategoriesPage({ params: { name } }) {
+  const docs = getDocuments();
+  const matchedDocuments = getDocumentByCategory(docs, name);
 
-export default function CategoriesPage({params: {name}}) {
-  return (
-    <div>{name}</div>
-  )
+  return <ContentDisplay id={matchedDocuments.id} />;
 }
