@@ -1,17 +1,46 @@
+"use client"
+import { getDocumentByAuthor, getDocumentByCategory, getDocumentByTag } from '@/utils/doc-util';
 import Link from 'next/link';
-import React from 'react'
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
 
 export const Sidebar = ({ docs }) => {
-  const roots = docs.filter(doc => !doc.parent);
-  // console.log(roots);
-  // object grouping data 
-  const nonRoots = docs
-    .filter(doc => doc.parent)
-    .reduce((acc, doc) => {
-      if (!acc[doc.parent]) acc[doc.parent] = [];
-      acc[doc.parent].push(doc);
-      return acc;
-    }, {});
+  const pathName = usePathname();
+  const [rootNodes, setRootNodes] = useState([]);
+  const [nonRootNodesGrouped, setNonRootNodesGrouped] = useState({});
+
+  useEffect(() => {
+    let matchedDocs = docs;
+
+    if (pathName.includes("/tags")) {
+      const tag = pathName.split('/')[2];
+      matchedDocs = getDocumentByTag(docs, tag)
+    }
+    else if (pathName.includes("/authors")) {
+      const author = pathName.split('/')[2];
+      matchedDocs = getDocumentByAuthor(docs, author)
+    }
+    else if (pathName.includes("/categories")) {
+      const category = pathName.split('/')[2];
+      matchedDocs = getDocumentByCategory(docs, category)
+    }
+
+    const roots = matchedDocs.filter(doc => !doc.parent);
+    const nonRoots = matchedDocs
+      .filter(doc => doc.parent)
+      .reduce((acc, doc) => {
+        if (!acc[doc.parent]) acc[doc.parent] = [];
+        acc[doc.parent].push(doc);
+        return acc;
+      }, {});
+
+    setRootNodes([...roots]);
+    setNonRootNodesGrouped({...nonRoots });
+
+  }, [pathName, docs])
+
+
 
   return (
     <>
@@ -19,7 +48,7 @@ export const Sidebar = ({ docs }) => {
         <ul role="list" className="border-l border-transparent">
 
           {
-            roots.map(rootNote => (
+            rootNodes.map(rootNote => (
               <li key={rootNote.id} className="relative">
                 <Link
                   className="flex justify-between gap-2 py-1 pl-4 pr-3 text-sm text-zinc-900 transition dark:text-white"
@@ -27,10 +56,10 @@ export const Sidebar = ({ docs }) => {
                 ><span className="truncate">{rootNote.title}</span>
                 </Link>
                 {
-                  nonRoots[rootNote.id] && (
+                  nonRootNodesGrouped[rootNote.id] && (
                     <ul role="list" style={{ opacity: 1 }}>
                       {
-                        nonRoots[rootNote.id].map(subRoot => (
+                        nonRootNodesGrouped[rootNote.id].map(subRoot => (
                           <li key={subRoot.id}>
                             <Link
                               className="flex justify-between gap-2 py-1 pl-7 pr-3 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"

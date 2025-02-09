@@ -9,7 +9,7 @@ export const ContentDisplay = async ({ id }) => {
       <article className="prose dark:prose-invert">
         <h2>{documentContent.title}</h2>
         <div>
-          <span>Published on : {documentContent.date}</span> by {" "} <Link href={`/author/${documentContent.author}`}>{documentContent.author}</Link> {" "} under the {" "} <Link href={`/category/${documentContent.category}`}>{documentContent.category}</Link> category.
+          <span>Published on : {documentContent.date}</span> by {" "} <Link href={`/authors/${documentContent.author}`}>{documentContent.author}</Link> {" "} under the {" "} <Link href={`/categories/${documentContent.category}`}>{documentContent.category}</Link> category.
         </div>
         <div>
           {
