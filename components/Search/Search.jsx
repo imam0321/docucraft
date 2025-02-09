@@ -1,9 +1,37 @@
+"use client"
+import { useDebounce } from '@/hooks/useDebounce';
 import Image from 'next/image'
-import React from 'react'
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react'
+import { SearchResult } from './SearchResult';
 
-export const Search = () => {
+export const Search = ({ docs }) => {
+  const [searchResult, setSearchResult] = useState([]);
+  const [term, setTerm] = useState("");
+  const router = useRouter();
+
+  function handleChange(e) {
+    const value = e.target.value;
+    setTerm(value);
+    doSearch(value);
+  }
+
+  const doSearch = useDebounce((term) => {
+    const found = docs.filter((doc) => {
+      return doc.title.toLowerCase().includes(term.toLowerCase());
+    });
+    console.log(found);
+    setSearchResult(found);
+  }, 500);
+
+  function closeSearchResults(event) {
+    event.preventDefault();
+    router.push(event.target.href);
+    setTerm("");
+  }
+
   return (
-    <div>
+    <>
       <div className="relative hidden lg:block lg:max-w-md lg:flex-auto">
         <button
           type="button"
@@ -12,12 +40,16 @@ export const Search = () => {
           <Image src="/icons/search.svg" width={20} height={20} alt='searchIcon' />
           <input
             type="text"
+            value={term}
             placeholder="Search..."
+            onChange={handleChange}
             className="flex-1 focus:border-none focus:outline-none"
           />
         </button>
       </div>
-
-    </div>
+      {term && term.trim().length > 0 && (
+        <SearchResult results={searchResult} term={term} closeSearchResults={closeSearchResults} />
+      )}
+    </>
   )
 }
